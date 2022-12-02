@@ -1,10 +1,13 @@
 package main
 
 import (
+	_ "embed"
 	"fmt"
-	"os"
 	"strings"
 )
+
+//go:embed input.txt
+var input string
 
 func main() {
 	fmt.Printf("Part 1: %d\n", part1())
@@ -63,7 +66,6 @@ func myScore(me string) int {
 }
 
 func part1() int {
-	input, _ := os.ReadFile("input.txt")
 	lines := strings.Split(string(input), "\n")
 	score := 0
 	for _, line := range lines {
@@ -114,7 +116,6 @@ func getMatch(elf, me string, win int) string {
 }
 
 func part2() int {
-	input, _ := os.ReadFile("input.txt")
 	lines := strings.Split(string(input), "\n")
 	score := 0
 	for _, line := range lines {
