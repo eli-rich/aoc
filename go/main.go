@@ -35,13 +35,12 @@ func main() {
 		times[i] = elapsed
 		tbl.AddRow("Day "+strconv.Itoa(i+1), part1, part2, fmt.Sprint(elapsed))
 	}
-	avg := time.Duration(0)
+	total := time.Duration(0)
 	for _, t := range times {
-		avg += t
+		total += t
 	}
-	avg /= CURRENT_DAY
 	tbl.AddRow("", "", "", "")
-	tbl.AddRow("Average", "", "", fmt.Sprint(avg))
+	tbl.AddRow("Total", "", "", fmt.Sprint(total))
 	tbl.Print()
 }
 
