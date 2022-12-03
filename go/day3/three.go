@@ -1,10 +1,8 @@
-package main
+package day3
 
 import (
 	_ "embed"
-	"fmt"
 	"strings"
-	"time"
 
 	"github.com/eli-rich/aocutils"
 )
@@ -14,20 +12,7 @@ var input string
 
 const alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
-func main() {
-	times := []time.Duration{}
-	for i := 0; i < 1000; i++ {
-		times = append(times, execute())
-	}
-	sum := time.Duration(0)
-	for _, t := range times {
-		sum += t
-	}
-	fmt.Println(sum / 1000)
-}
-
-func execute() time.Duration {
-	start := time.Now()
+func Execute() (int, int) {
 	lines := strings.Split(input, "\n")
 	sum := aocutils.ArrayReduce(lines, func(sum int, line string) int {
 		length := len(line)
@@ -54,7 +39,5 @@ func execute() time.Duration {
 			}
 		}
 	}
-	duration := time.Since(start)
-	fmt.Println(sum, sum2)
-	return duration
+	return sum, sum2
 }
