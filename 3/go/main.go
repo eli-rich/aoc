@@ -4,6 +4,7 @@ import (
 	_ "embed"
 	"fmt"
 	"strings"
+	"time"
 )
 
 //go:embed input.txt
@@ -12,6 +13,19 @@ var input string
 const alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 func main() {
+	times := []time.Duration{}
+	for i := 0; i < 1000; i++ {
+		times = append(times, execute())
+	}
+	sum := time.Duration(0)
+	for _, t := range times {
+		sum += t
+	}
+	fmt.Println(sum / 1000)
+}
+
+func execute() time.Duration {
+	start := time.Now()
 	lines := strings.Split(input, "\n")
 	sum := 0
 	for _, line := range lines {
@@ -36,5 +50,5 @@ func main() {
 			}
 		}
 	}
-	fmt.Println(sum, sum2)
+	return time.Since(start)
 }
