@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"strings"
 	"time"
+
+	"github.com/eli-rich/aocutils"
 )
 
 //go:embed input.txt
@@ -27,17 +29,19 @@ func main() {
 func execute() time.Duration {
 	start := time.Now()
 	lines := strings.Split(input, "\n")
-	sum := 0
-	for _, line := range lines {
-		first := line[:len(line)/2]
-		second := line[len(line)/2:]
+	sum := aocutils.ArrayReduce(lines, func(sum int, line string) int {
+		length := len(line)
+		first := line[:length/2]
+		second := line[length/2:]
 		for _, char := range first {
 			if strings.Contains(second, string(char)) {
 				sum += strings.Index(alphabet, string(char)) + 1
 				break
 			}
 		}
-	}
+		return sum
+	}, 0)
+
 	sum2 := 0
 	for i := 0; i < len(lines); i += 3 {
 		first := lines[i]
@@ -50,5 +54,7 @@ func execute() time.Duration {
 			}
 		}
 	}
-	return time.Since(start)
+	duration := time.Since(start)
+	fmt.Println(sum, sum2)
+	return duration
 }
