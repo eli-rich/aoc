@@ -1,34 +1,39 @@
-import { readFile } from 'node:fs/promises';
+import fs from 'fs';
 
-const input = await readFile('input.txt', 'utf-8');
-
-const lines = input.trim().split('\n');
-
-const ranges = lines.map((line) => line.split(',').map((range) => range.split('-').map(Number)));
-
-const part1 = ranges.reduce((count, [left, right]) => {
-  const [leftStart, leftEnd] = left;
-  const [rightStart, rightEnd] = right;
-  if (
-    (leftStart <= rightStart && leftEnd >= rightEnd) ||
-    (rightStart <= leftStart && rightEnd >= leftEnd)
-  ) {
-    count++;
+const range = (start, end) => {
+  const arr = [];
+  for (let i = start; i <= end; i++) {
+    arr.push(i);
   }
-  return count;
-}, 0);
+  return arr;
+};
 
-const part2 = ranges.reduce((count, [left, right]) => {
-  const [leftStart, leftEnd] = left;
-  const [rightStart, rightEnd] = right;
-  if (
-    (leftStart <= rightEnd && leftEnd >= rightStart) ||
-    (rightStart <= leftEnd && rightEnd >= leftStart)
-  ) {
-    count++;
-  }
-  return count;
-}, 0);
+const contains = (range1, range2) => {
+  const [start1, end1] = range1.split('-').map(Number);
+  const [start2, end2] = range2.split('-').map(Number);
+  const set1 = new Set(range(start1, end1));
+  const set2 = new Set(range(start2, end2));
+  return new Set([...set1].filter((x) => set2.has(x))).size === set1.size;
+};
 
-console.log(part1);
-console.log(part2);
+const fullContains = (range1, range2) => {
+  const [start1, end1] = range1.split('-').map(Number);
+  const [start2, end2] = range2.split('-').map(Number);
+  const set1 = new Set(range(start1, end1));
+  const set2 = new Set(range(start2, end2));
+  return new Set([...set1].filter((x) => set2.has(x))).size > 0;
+};
+
+const input = fs.readFileSync('input.txt', 'utf8').trim().split('\n');
+
+const count = input.reduce(
+  (scores, line) => {
+    const [range1, range2] = line.split(',');
+    if (contains(range1, range2) || contains(range2, range1)) scores.part1++;
+    if (fullContains(range1, range2)) scores.part2++;
+    return scores;
+  },
+  { part1: 0, part2: 0 },
+);
+
+console.log(count);
