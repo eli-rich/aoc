@@ -8,6 +8,7 @@ import (
 	"github.com/eli-rich/aco/go/day1"
 	"github.com/eli-rich/aco/go/day2"
 	"github.com/eli-rich/aco/go/day3"
+	"github.com/eli-rich/aco/go/day4"
 	"github.com/fatih/color"
 	"github.com/rodaine/table"
 )
@@ -15,7 +16,7 @@ import (
 type DayFunc = func() (time.Duration, int, int)
 
 const ITERATIONS = 500
-const CURRENT_DAY = 3
+const CURRENT_DAY = 4
 
 func main() {
 	headerFmt := color.New(color.FgGreen, color.Underline).SprintfFunc()
@@ -28,6 +29,7 @@ func main() {
 		d1,
 		d2,
 		d3,
+		d4,
 	}
 	times := make([]time.Duration, CURRENT_DAY)
 	for i := 0; i < CURRENT_DAY; i++ {
@@ -77,6 +79,13 @@ func d2() (time.Duration, int, int) {
 func d3() (time.Duration, int, int) {
 	start := time.Now()
 	part1, part2 := day3.Execute()
+	elapsed := time.Since(start)
+	return elapsed, part1, part2
+}
+
+func d4() (time.Duration, int, int) {
+	start := time.Now()
+	part1, part2 := day4.Execute()
 	elapsed := time.Since(start)
 	return elapsed, part1, part2
 }
