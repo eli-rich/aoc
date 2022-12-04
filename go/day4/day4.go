@@ -20,14 +20,14 @@ func Execute() (int, int) {
 		splitDash := aocutils.ArrayMap(splitComma, func(s string) []string {
 			return strings.Split(s, "-")
 		})
-		leftStart, _ := strconv.Atoi(splitDash[0][0])
-		leftEnd, _ := strconv.Atoi(splitDash[0][1])
-		rightStart, _ := strconv.Atoi(splitDash[1][0])
-		rightEnd, _ := strconv.Atoi(splitDash[1][1])
+		leftStart, _ := strconv.ParseInt(splitDash[0][0], 10, 32)
+		leftEnd, _ := strconv.ParseInt(splitDash[0][1], 10, 32)
+		rightStart, _ := strconv.ParseInt(splitDash[1][0], 10, 32)
+		rightEnd, _ := strconv.ParseInt(splitDash[1][1], 10, 32)
 		if (leftStart <= rightStart && leftEnd >= rightEnd) || (rightStart <= leftStart && rightEnd >= leftEnd) {
 			part1++
 		}
-		if (leftStart <= rightEnd && leftEnd >= rightStart) || (rightStart <= leftEnd && rightEnd >= leftStart) {
+		if !((rightStart > leftEnd) || (rightEnd < leftStart)) {
 			part2++
 		}
 	}
