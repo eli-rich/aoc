@@ -1,3 +1,3 @@
-# Advent of Code 2022
+# Advent of Code
 
-Solutions will be in Go, Typescript, or both.
+Solutions will be in Go, TypeScript, or JavaScript.
