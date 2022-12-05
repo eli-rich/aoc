@@ -9,14 +9,15 @@ import (
 	"github.com/eli-rich/aco/go/day2"
 	"github.com/eli-rich/aco/go/day3"
 	"github.com/eli-rich/aco/go/day4"
+	"github.com/eli-rich/aco/go/day5"
 	"github.com/fatih/color"
 	"github.com/rodaine/table"
 )
 
-type DayFunc = func() (time.Duration, int, int)
+type DayFunc = func() (time.Duration, string, string)
 
 const ITERATIONS = 500
-const CURRENT_DAY = 4
+const CURRENT_DAY = 5
 
 func main() {
 	headerFmt := color.New(color.FgGreen, color.Underline).SprintfFunc()
@@ -30,6 +31,7 @@ func main() {
 		d2,
 		d3,
 		d4,
+		d5,
 	}
 	times := make([]time.Duration, CURRENT_DAY)
 	for i := 0; i < CURRENT_DAY; i++ {
@@ -46,9 +48,9 @@ func main() {
 	tbl.Print()
 }
 
-func sim(fn DayFunc) (time.Duration, int, int) {
+func sim(fn DayFunc) (time.Duration, string, string) {
 	times := make([]time.Duration, ITERATIONS)
-	p1, p2 := 0, 0
+	p1, p2 := "", ""
 	for i := 0; i < ITERATIONS; i++ {
 		elapsed, part1, part2 := fn()
 		times[i] = elapsed
@@ -62,30 +64,47 @@ func sim(fn DayFunc) (time.Duration, int, int) {
 	return avg, p1, p2
 }
 
-func d1() (time.Duration, int, int) {
+func d1() (time.Duration, string, string) {
 	start := time.Now()
 	part1, part2 := day1.Execute()
 	elapsed := time.Since(start)
-	return elapsed, part1, part2
+	r1 := strconv.Itoa(part1)
+	r2 := strconv.Itoa(part2)
+	return elapsed, r1, r2
 }
 
-func d2() (time.Duration, int, int) {
+func d2() (time.Duration, string, string) {
 	start := time.Now()
 	part1, part2 := day2.Execute()
 	elapsed := time.Since(start)
-	return elapsed, part1, part2
+	r1 := strconv.Itoa(part1)
+	r2 := strconv.Itoa(part2)
+	return elapsed, r1, r2
 }
 
-func d3() (time.Duration, int, int) {
+func d3() (time.Duration, string, string) {
 	start := time.Now()
 	part1, part2 := day3.Execute()
 	elapsed := time.Since(start)
-	return elapsed, part1, part2
+	r1 := strconv.Itoa(part1)
+	r2 := strconv.Itoa(part2)
+	return elapsed, r1, r2
 }
 
-func d4() (time.Duration, int, int) {
+func d4() (time.Duration, string, string) {
 	start := time.Now()
 	part1, part2 := day4.Execute()
 	elapsed := time.Since(start)
-	return elapsed, part1, part2
+	r1 := strconv.Itoa(part1)
+	r2 := strconv.Itoa(part2)
+	return elapsed, r1, r2
+}
+
+func d5() (time.Duration, string, string) {
+	start := time.Now()
+	part1, part2 := day5.Execute()
+	elapsed := time.Since(start)
+	r1 := part1
+	r2 := part2
+	return elapsed, r1, r2
 }
