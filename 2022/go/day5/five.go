@@ -105,40 +105,43 @@ func transposeStacks(stacks []Stack, stackSize int) []Stack {
 }
 
 func parseStepStacks(lines []string) ([]Step, []Stack, int) {
-	// We don't want to start parsing steps until we have parsed the stacks.
-	shouldParseSteps := false
-	shouldParseStacks := true
+	// Parse the stacks
+	stacks, stackSize := parseStacks(lines)
+	// Parse the steps
+	steps := parseSteps(lines, stackSize+2)
 
-	var steps []Step
-	var stacks []Stack
-	var stackSize int
-	for i, line := range lines {
-		if line == "" {
-			// We can start parsing steps.
-			shouldParseSteps = true
-			continue
-		} else if !strings.Contains(line, "[") && shouldParseStacks {
-			// There is no "[" in the line, so we are done parsing stacks.
-			// Stacksize is the length of the lines
-			shouldParseStacks = false
-			stackSize = i
-		}
-		if shouldParseSteps {
-			var from int
-			var to int
-			var quantity int
-			fmt.Sscanf(line, "move %d from %d to %d", &quantity, &from, &to)
-			steps = append(steps, Step{from - 1, to - 1, quantity})
-		} else if shouldParseStacks {
-			// THANK YOU @Lebster#0617
-			// This was otherwise impossible for me to figure out
-			crate := strings.ReplaceAll(line, "    ", "-") // Four spaces indicates blank
-			crate = strings.ReplaceAll(crate, " ", "")     // Other spaces are separators
-			crate = strings.ReplaceAll(crate, "[", "")     // Brackets are decorative
-			crate = strings.ReplaceAll(crate, "]", "")
-			// Result here will be -D- for example line 1
-			stacks = append(stacks, strings.Split(crate, ""))
-		}
-	}
 	return steps, stacks, stackSize
+}
+
+func parseSteps(lines []string, startLine int) []Step {
+	var steps []Step
+	for i := startLine; i < len(lines); i++ {
+		if lines[i] == "" {
+			break
+		}
+		var from int
+		var to int
+		var quantity int
+		fmt.Sscanf(lines[i], "move %d from %d to %d", &quantity, &from, &to)
+		steps = append(steps, Step{from - 1, to - 1, quantity})
+	}
+	return steps
+}
+
+func parseStacks(lines []string) ([]Stack, int) {
+	var stacks []Stack
+	for i, line := range lines {
+		if !strings.Contains(line, "[") {
+			return stacks, i
+		}
+		// THANK YOU @Lebster#0617
+		// This was otherwise impossible for me to figure out
+		crate := strings.ReplaceAll(line, "    ", "-") // Four spaces indicates blank
+		crate = strings.ReplaceAll(crate, " ", "")     // Other spaces are separators
+		crate = strings.ReplaceAll(crate, "[", "")     // Brackets are decorative
+		crate = strings.ReplaceAll(crate, "]", "")
+		// Result here will be -D- for example line 1
+		stacks = append(stacks, strings.Split(crate, ""))
+	}
+	return stacks, -1
 }
