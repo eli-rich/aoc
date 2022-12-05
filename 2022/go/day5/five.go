@@ -108,7 +108,7 @@ func parseStepStacks(lines []string) ([]Step, []Stack, int) {
 	// We don't want to start parsing steps until we have parsed the stacks.
 	shouldParseSteps := false
 	shouldParseStacks := true
-	// Initialize variables
+
 	var steps []Step
 	var stacks []Stack
 	var stackSize int
