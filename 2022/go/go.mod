@@ -1,4 +1,4 @@
-module github.com/eli-rich/aco/go
+module github.com/eli-rich/aoc/go
 
 go 1.19
 
