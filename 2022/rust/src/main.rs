@@ -1,11 +1,11 @@
 mod day1;
 mod day2;
 mod day3;
-use std::time::{Duration, Instant};
+mod day4;
 use std::fmt::Display;
+use std::time::{Duration, Instant};
 
-use tabled::{Tabled, Table};
-
+use tabled::{Table, Tabled};
 
 struct Day<R: Display> {
     durations: [Duration; ITERATIONS],
@@ -20,11 +20,11 @@ struct Output {
     average: DurationString,
 }
 
-const DAYS: usize = 3;
+const DAYS: usize = 4;
 const ITERATIONS: usize = 500;
 
 fn main() {
-    let funcs = [d1, d2, d3];
+    let funcs = [d1, d2, d3, d4];
     let mut outputs: Vec<Output> = Vec::new();
     let mut averages = [Duration::new(0, 0); DAYS];
     for i in 0..DAYS {
@@ -76,8 +76,8 @@ fn d1() -> Day<String> {
     }
     return Day {
         durations,
-        result: day1::execute().map(|x| x.to_string())
-    }
+        result: day1::execute().map(|x| x.to_string()),
+    };
 }
 
 fn d2() -> Day<String> {
@@ -89,8 +89,8 @@ fn d2() -> Day<String> {
     }
     return Day {
         durations,
-        result: day2::execute().map(|x| x.to_string())
-    }
+        result: day2::execute().map(|x| x.to_string()),
+    };
 }
 
 fn d3() -> Day<String> {
@@ -102,6 +102,19 @@ fn d3() -> Day<String> {
     }
     return Day {
         durations,
-        result: day3::execute().map(|x| x.to_string())
+        result: day3::execute().map(|x| x.to_string()),
+    };
+}
+
+fn d4() -> Day<String> {
+    let mut durations: [Duration; ITERATIONS] = [Duration::new(0, 0); ITERATIONS];
+    for i in 0..ITERATIONS {
+        let start = Instant::now();
+        day4::execute();
+        durations[i] = start.elapsed();
     }
+    return Day {
+        durations,
+        result: day4::execute().map(|x| x.to_string()),
+    };
 }

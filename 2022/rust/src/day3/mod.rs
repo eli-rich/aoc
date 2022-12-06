@@ -26,7 +26,6 @@ pub fn execute() -> [u32; 2] {
                 break;
             }
         }
-
     }
     return [sum as u32, sum2 as u32];
 }
