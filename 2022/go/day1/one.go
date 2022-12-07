@@ -18,8 +18,11 @@ func Execute() (int, int) {
 	for _, v := range arr {
 		if v == "" {
 			if current > top {
+				top3 = top2
+				top2 = top
 				top = current
 			} else if current > top2 {
+				top3 = top2
 				top2 = current
 			} else if current > top3 {
 				top3 = current
