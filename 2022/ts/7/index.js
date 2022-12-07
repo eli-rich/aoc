@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 
-const input = readFileSync('./test.txt', 'utf-8')
+const input = readFileSync('./input.txt', 'utf-8')
   .trim()
   .split('$')
   .filter((line) => line.length > 0)
@@ -32,8 +32,6 @@ for (const line of input) {
 files.set('/', files.get(''));
 files.delete('');
 
-console.log(files);
-
 const calculateSum = (currentDir) => {
   let sum = 0;
   const filesInDir = files.get(currentDir);
@@ -55,6 +53,10 @@ const result = [];
 for (const [dir, _] of files) {
   result.push(calculateSum(dir));
 }
+
+console.log(result.length);
+
+console.log(result.filter((val) => val <= 100000).length);
 console.log(result.filter((val) => val <= 100000).reduce((sum, val) => sum + val, 0));
 
 const MAX_FS_SIZE = 70000000;
