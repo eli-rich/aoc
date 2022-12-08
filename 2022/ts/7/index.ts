@@ -32,7 +32,7 @@ for (const line of input) {
 files.set('/', files.get(''));
 files.delete('');
 
-const calculateSum = (currentDir) => {
+const calculateSum = (currentDir: string) => {
   let sum = 0;
   const filesInDir = files.get(currentDir);
   for (const file of filesInDir) {

@@ -1,0 +1,29 @@
+lockfileVersion: 5.4
+
+specifiers:
+  '@types/node': ^18.11.11
+  bun-types: ^0.3.0
+  typescript: ^4.9.4
+
+dependencies:
+  bun-types: 0.3.0
+
+devDependencies:
+  '@types/node': 18.11.11
+  typescript: 4.9.4
+
+packages:
+
+  /@types/node/18.11.11:
+    resolution: {integrity: sha512-KJ021B1nlQUBLopzZmPBVuGU9un7WJd/W4ya7Ih02B4Uwky5Nja0yGYav2EfYIk0RR2Q9oVhf60S2XR1BCWJ2g==}
+    dev: true
+
+  /bun-types/0.3.0:
+    resolution: {integrity: sha512-cn9ApQi1nppfTzrpqRCVIkkSyrRmV/RUik9c4FBY0Fet9Jnl4ANcDW/z9m/pM/glC7b9e3WChEtAmo9etHpTbQ==}
+    dev: false
+
+  /typescript/4.9.4:
+    resolution: {integrity: sha512-Uz+dTXYzxXXbsFpM86Wh3dKCxrQqUcVMxwU54orwlJjOpO3ao8L7j5lH+dWfTwgCwIuM9GQ2kvVotzYJMXTBZg==}
+    engines: {node: '>=4.2.0'}
+    hasBin: true
+    dev: true

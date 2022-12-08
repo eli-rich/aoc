@@ -1,6 +1,8 @@
-import { readFileSync as r } from 'node:fs';
+import { readFileSync } from 'node:fs';
 
-const [stackInput, stepInput] = r('./input.txt', 'utf-8').replaceAll('\r', '').split('\n\n');
+const [stackInput, stepInput] = readFileSync('./input.txt', 'utf-8')
+  .replaceAll('\r', '')
+  .split('\n\n');
 
 // THANK YOU LEBSTER
 const stacks = stackInput
@@ -14,7 +16,7 @@ const stacks = stackInput
       .replaceAll(']', '')
       .split(''),
   )
-  .reduce((stacks, stack) => {
+  .reduce((stacks: string[][], stack: string[]) => {
     for (let i = 0; i < stack.length; i++) {
       if (!stacks[i]) stacks[i] = [];
       if (stack[i] === '-') continue;
@@ -22,12 +24,13 @@ const stacks = stackInput
     }
     return stacks;
   }, []);
-const stacks2 = JSON.parse(JSON.stringify(stacks));
+const stacks2: string[][] = JSON.parse(JSON.stringify(stacks));
 
-const result = stepInput
+stepInput
   .split('\n')
   .map((line) => line.match(/move (\d+) from (\d+) to (\d+)/))
-  .filter((match) => match != null)
+  .filter((match) => match !== null)
+  // @ts-ignore
   .map(([, quantity, from, to]) => ({
     quantity: Number(quantity),
     from: Number(from - 1),
@@ -37,7 +40,7 @@ const result = stepInput
     const { quantity, from, to } = step;
     for (let i = 0; i < quantity; i++) {
       const crate = stacks[from].shift();
-      stacks[to].unshift(crate);
+      stacks[to].unshift(crate!);
     }
     const crates = stacks2[from].splice(0, quantity);
     stacks2[to].unshift(...crates);

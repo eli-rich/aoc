@@ -6,7 +6,7 @@ const trees = input.split('\n').map((line) => line.split('').map((ch) => parseIn
 
 let visible = 0;
 // a tree is visible if it is greater than any number between it and any edge
-const checkVisible = (i, j) => {
+const checkVisible = (i: number, j: number) => {
   let notleft = false;
   let notright = false;
   let nottop = false;
@@ -64,7 +64,7 @@ A tree's scenic score is found by multiplying together its viewing distance in e
  For this tree, this is 4 (found by multiplying 1 * 1 * 2 * 2).
 */
 
-const calculateScenic = (i, j) => {
+const calculateScenic = (i: number, j: number) => {
   let left = 0;
   let right = 0;
   let top = 0;
