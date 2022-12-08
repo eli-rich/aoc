@@ -12,7 +12,7 @@ import (
 var input string
 
 func Execute() (int, int) {
-	lines := strings.Split(input, "\n")
+	lines := strings.Split(strings.TrimSpace(input), "\n")
 	trees := aocutils.ArrayMap(lines, func(line string) []int {
 		return aocutils.ArrayMap(strings.Split(line, ""), func(c string) int {
 			val, _ := strconv.Atoi(c)
