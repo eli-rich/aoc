@@ -2,6 +2,8 @@ mod day1;
 mod day2;
 mod day3;
 mod day4;
+
+mod day8;
 use std::fmt::Display;
 use std::time::{Duration, Instant};
 
@@ -20,11 +22,11 @@ struct Output {
     average: DurationString,
 }
 
-const DAYS: usize = 4;
-const ITERATIONS: usize = 500;
+const DAYS: usize = 5;
+const ITERATIONS: usize = 1;
 
 fn main() {
-    let funcs = [d1, d2, d3, d4];
+    let funcs = [d1, d2, d3, d4, d8];
     let mut outputs: Vec<Output> = Vec::new();
     let mut averages = [Duration::new(0, 0); DAYS];
     for i in 0..DAYS {
@@ -116,5 +118,18 @@ fn d4() -> Day<String> {
     return Day {
         durations,
         result: day4::execute().map(|x| x.to_string()),
+    };
+}
+
+fn d8() -> Day<String> {
+    let mut durations: [Duration; ITERATIONS] = [Duration::new(0, 0); ITERATIONS];
+    for i in 0..ITERATIONS {
+        let start = Instant::now();
+        day8::execute();
+        durations[i] = start.elapsed();
+    }
+    return Day {
+        durations,
+        result: day8::execute().map(|x| x.to_string()),
     };
 }
