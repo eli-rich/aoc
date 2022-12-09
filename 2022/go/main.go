@@ -13,14 +13,15 @@ import (
 	"github.com/eli-rich/aoc/go/day6"
 	"github.com/eli-rich/aoc/go/day7"
 	"github.com/eli-rich/aoc/go/day8"
+	"github.com/eli-rich/aoc/go/day9"
 	"github.com/fatih/color"
 	"github.com/rodaine/table"
 )
 
 type DayFunc = func() (time.Duration, string, string)
 
-const ITERATIONS = 250
-const CURRENT_DAY = 8
+const ITERATIONS = 1
+const CURRENT_DAY = 9
 
 func main() {
 	headerFmt := color.New(color.FgGreen, color.Underline).SprintfFunc()
@@ -38,6 +39,7 @@ func main() {
 		d6,
 		d7,
 		d8,
+		d9,
 	}
 	times := make([]time.Duration, CURRENT_DAY)
 	for i := 0; i < CURRENT_DAY; i++ {
@@ -136,6 +138,15 @@ func d7() (time.Duration, string, string) {
 func d8() (time.Duration, string, string) {
 	start := time.Now()
 	part1, part2 := day8.Execute()
+	elapsed := time.Since(start)
+	r1 := strconv.Itoa(part1)
+	r2 := strconv.Itoa(part2)
+	return elapsed, r1, r2
+}
+
+func d9() (time.Duration, string, string) {
+	start := time.Now()
+	part1, part2 := day9.Execute()
 	elapsed := time.Since(start)
 	r1 := strconv.Itoa(part1)
 	r2 := strconv.Itoa(part2)
