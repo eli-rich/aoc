@@ -34,7 +34,7 @@ func Execute() (int, string) {
 	values := getCycleVals(instructions)
 	p1 := part1(values)
 	p2 := part2(instructions)
-	return p1, strings.TrimSpace(p2)
+	return p1, p2
 }
 
 func exec(instruction Instruction, register int) int {
@@ -124,7 +124,7 @@ func part2(instructions []Instruction) string {
 			if shouldDraw(cycle, register) {
 				result += "#"
 			} else {
-				result += " "
+				result += "."
 			}
 			cycle++
 			next.remaining--

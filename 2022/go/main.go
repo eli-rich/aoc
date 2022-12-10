@@ -160,6 +160,6 @@ func d10() (time.Duration, string, string) {
 	part1, part2 := day10.Execute()
 	elapsed := time.Since(start)
 	r1 := strconv.Itoa(part1)
-	r2 := part2
+	r2 := read(part2)
 	return elapsed, r1, r2
 }
