@@ -39,6 +39,8 @@ for (const instruction of instructions) {
 let register = 1;
 let cycle = 1;
 
+let draw = '';
+
 const execute = (instruction: Instruction) => {
   switch (instruction.op) {
     case 'noop':
@@ -46,6 +48,20 @@ const execute = (instruction: Instruction) => {
     case 'addx':
       register += instruction.value ?? 0;
       break;
+  }
+};
+
+const threePixels = (register: number) => {
+  return [register - 1, register, register + 1];
+};
+
+const drawPixel = (cycle: number, register: number) => {
+  cycle = cycle - 1;
+  if (cycle % 40 === 0) draw += '\n';
+  if (threePixels(register).includes(cycle % 40)) {
+    draw += '#';
+  } else {
+    draw += '.';
   }
 };
 
@@ -57,6 +73,7 @@ while (queue.length > 0) {
 
   while (next.remaining > 0) {
     values.set(cycle, register);
+    drawPixel(cycle, register);
     cycle++;
     next.remaining--;
   }
@@ -77,51 +94,4 @@ const cycleSum = () => {
 };
 
 console.log(cycleSum());
-
-// part 2
-queue = [];
-
-// reload queue
-for (const instruction of instructions) {
-  switch (instruction.op) {
-    case 'noop':
-      queue.push({ instruction, remaining: 1 });
-      break;
-    case 'addx':
-      queue.push({ instruction, remaining: 2 });
-      break;
-  }
-}
-
-register = 1;
-cycle = 1;
-
-let draw = '';
-
-const threePixels = (register: number) => {
-  return [register - 1, register, register + 1];
-};
-
-const drawPixel = (cycle: number, register: number) => {
-  cycle = cycle - 1;
-  if (cycle % 40 === 0) draw += '\n';
-  if (threePixels(register).includes(cycle % 40)) {
-    draw += '#';
-  } else {
-    draw += '.';
-  }
-};
-
-while (queue.length > 0) {
-  const next = queue.shift();
-  if (!next) break;
-
-  while (next.remaining > 0) {
-    drawPixel(cycle, register);
-    cycle++;
-    next.remaining--;
-  }
-  execute(next.instruction);
-}
-
 console.log(draw);
