@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/eli-rich/aoc/go/day1"
+	"github.com/eli-rich/aoc/go/day10"
 	"github.com/eli-rich/aoc/go/day2"
 	"github.com/eli-rich/aoc/go/day3"
 	"github.com/eli-rich/aoc/go/day4"
@@ -20,8 +21,8 @@ import (
 
 type DayFunc = func() (time.Duration, string, string)
 
-const ITERATIONS = 500
-const CURRENT_DAY = 9
+const ITERATIONS = 1
+const CURRENT_DAY = 10
 
 func main() {
 	headerFmt := color.New(color.FgGreen, color.Underline).SprintfFunc()
@@ -40,6 +41,7 @@ func main() {
 		d7,
 		d8,
 		d9,
+		d10,
 	}
 	times := make([]time.Duration, CURRENT_DAY)
 	for i := 0; i < CURRENT_DAY; i++ {
@@ -150,5 +152,14 @@ func d9() (time.Duration, string, string) {
 	elapsed := time.Since(start)
 	r1 := strconv.Itoa(part1)
 	r2 := strconv.Itoa(part2)
+	return elapsed, r1, r2
+}
+
+func d10() (time.Duration, string, string) {
+	start := time.Now()
+	part1, part2 := day10.Execute()
+	elapsed := time.Since(start)
+	r1 := strconv.Itoa(part1)
+	r2 := part2
 	return elapsed, r1, r2
 }

@@ -117,7 +117,6 @@ while (queue.length > 0) {
   if (!next) break;
 
   while (next.remaining > 0) {
-    values.set(cycle, register);
     drawPixel(cycle, register);
     cycle++;
     next.remaining--;
