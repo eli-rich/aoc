@@ -3,7 +3,8 @@ mod day2;
 mod day3;
 mod day4;
 
-mod day8;
+mod day9;
+
 use std::fmt::Display;
 use std::time::{Duration, Instant};
 
@@ -26,7 +27,7 @@ const DAYS: usize = 5;
 const ITERATIONS: usize = 1;
 
 fn main() {
-    let funcs = [d1, d2, d3, d4, d8];
+    let funcs = [d1, d2, d3, d4, d9];
     let mut outputs: Vec<Output> = Vec::new();
     let mut averages = [Duration::new(0, 0); DAYS];
     for i in 0..DAYS {
@@ -121,15 +122,15 @@ fn d4() -> Day<String> {
     };
 }
 
-fn d8() -> Day<String> {
+fn d9() -> Day<String> {
     let mut durations: [Duration; ITERATIONS] = [Duration::new(0, 0); ITERATIONS];
     for i in 0..ITERATIONS {
         let start = Instant::now();
-        day8::execute();
+        day9::execute();
         durations[i] = start.elapsed();
     }
     return Day {
         durations,
-        result: day8::execute().map(|x| x.to_string()),
+        result: day9::execute().map(|x| x.to_string()),
     };
 }
