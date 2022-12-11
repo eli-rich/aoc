@@ -22,7 +22,7 @@ import (
 
 type DayFunc = func() (time.Duration, string, string)
 
-const ITERATIONS = 500
+const ITERATIONS = 250
 const CURRENT_DAY = 11
 
 func main() {
