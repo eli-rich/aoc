@@ -1,5 +1,4 @@
 import { readFileSync } from 'node:fs';
-import part2 from './part2.js';
 
 const input = readFileSync('input.txt', 'utf-8').trim().split('\n\n');
 
@@ -48,6 +47,8 @@ for (const chunk of input) {
   monkeys.push({ id, items: startItems, operation, test, inspections: 0 });
 }
 
+const clonedMonkeys: Monkey[] = JSON.parse(JSON.stringify(monkeys));
+
 const MOD = monkeys.map((monkey) => monkey.test.number).reduce((a, b) => a * b);
 
 const evalExpr = (expr: string, worry: number): number => {
@@ -83,7 +84,7 @@ const test = (monkey: Monkey, itemIndex: number) => {
   return item % monkey.test.number === 0;
 };
 
-const throwItem = (to: number, item: number) => {
+const throwItem = (to: number, item: number, monkeys: Monkey[]) => {
   const monkey = monkeys.find((monkey) => monkey.id === to)!;
   monkey.items.push(item % MOD);
 };
@@ -100,14 +101,29 @@ for (let i = 0; i < ROUND_NUMBER; i++) {
     while (monkey.items.length > 0) {
       inspect(monkey, 0);
       const item = monkey.items[0];
-      if (test(monkey, 0)) throwItem(monkey.test.true, item);
-      else throwItem(monkey.test.false, item);
+      if (test(monkey, 0)) throwItem(monkey.test.true, item, monkeys);
+      else throwItem(monkey.test.false, item, monkeys);
+      monkey.items.shift();
+    }
+  }
+}
+const [top1, top2] = getTop2(monkeys);
+console.log(top1.inspections * top2.inspections);
+
+const ROUND_NUMBER2 = 10_000;
+
+for (let i = 0; i < ROUND_NUMBER2; i++) {
+  for (const monkey of clonedMonkeys) {
+    while (monkey.items.length > 0) {
+      inspect(monkey, 0, false);
+      const item = monkey.items[0];
+      if (test(monkey, 0)) throwItem(monkey.test.true, item, clonedMonkeys);
+      else throwItem(monkey.test.false, item, clonedMonkeys);
       monkey.items.shift();
     }
   }
 }
 
-const [top1, top2] = getTop2(monkeys);
+const [secondTop1, secondTop2] = getTop2(clonedMonkeys);
 
-console.log(top1.inspections * top2.inspections);
-console.log(part2);
+console.log(secondTop1.inspections * secondTop2.inspections);
