@@ -28,8 +28,7 @@ for (const chunk of input) {
     .split(' ')
     .map((x) => parseInt(x))
     .filter((x) => !isNaN(x));
-  let opValue = lines[2].split(' ').slice(5, 8).join(' ');
-  const operation: Operation = opValue;
+  const operation: Operation = lines[2].split(' ').slice(5, 8).join(' ');
   const test: Test = {
     number: lines[3]
       .split(' ')
