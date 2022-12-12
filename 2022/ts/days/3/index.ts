@@ -31,8 +31,6 @@ const result = priorities.reduce((sum, p) => {
   return sum + upper.indexOf(p) + 27;
 }, 0);
 
-console.log(result);
-
 const findItems2 = (groups: string[]) => {
   const first = groups[0];
   const second = groups[1];
@@ -64,4 +62,9 @@ const result2 = priorities2.reduce((sum, p) => {
   return sum + upper.indexOf(p) + 27;
 }, 0);
 
-console.log(result2);
+const answer = {
+  part1: result,
+  part2: result2,
+};
+
+export default answer;
