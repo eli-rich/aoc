@@ -71,7 +71,6 @@ for (const line of input) {
   const dist = parseInt(split[1], 10);
   moveOneAtATime(dir, dist);
 }
-console.log(positions.length);
 
 const positions2: Pos[] = [];
 const nodes: Pos[] = Array.from({ length: 10 }, () => ({ x: 0, y: 0 }));
@@ -117,4 +116,9 @@ for (const line of input) {
   }
 }
 
-console.log(positions2.length);
+const answer = {
+  part1: positions.length,
+  part2: positions2.length,
+};
+
+export default answer;
