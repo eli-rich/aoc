@@ -93,5 +93,9 @@ const cycleSum = () => {
   return sum;
 };
 
-console.log(cycleSum());
-console.log(draw);
+const answer = {
+  part1: cycleSum(),
+  part2: draw,
+};
+
+export default answer;
