@@ -22,9 +22,11 @@ const start: State = grid.flatMap((row, y) =>
 )[0];
 
 // get target position
-const target: State = grid.flatMap((row, y) =>
+const target1: State = grid.flatMap((row, y) =>
   row.flatMap((value, x) => (value === 26 ? { x, y, steps: 0 } : [])),
 )[0];
+
+const target2 = 0;
 
 const getNeighbors = (x: number, y: number) => {
   const neighbors = [];
@@ -40,10 +42,12 @@ const getValue = (x: number, y: number) => grid[y][x];
 const canVisit = (from: Pos, to: Pos, reverse: boolean = false) => {
   const fromValue = getValue(from.x, from.y);
   const toValue = getValue(to.x, to.y);
-  return reverse ? fromValue - toValue < 2 : toValue - fromValue < 2;
+  return fromValue - toValue < 2;
 };
 
-const path = (start: State, target: State): State | undefined => {
+const answers = new Map<string, number>();
+
+const path = (start: State, target1: State, target2: number): Map<string, number> => {
   const queue = [start];
   const visited = new Set<string>();
   while (queue.length) {
@@ -51,33 +55,22 @@ const path = (start: State, target: State): State | undefined => {
     const key = `${x},${y}`;
     if (visited.has(key)) continue;
     visited.add(key);
-    if (x === target.x && y === target.y) return { x, y, steps };
+    if (x === target1.x && y === target1.y) {
+      if (!answers.has('p1')) answers.set('p1', steps);
+      if (answers.has('p2')) return answers;
+    }
+    if (getValue(x, y) === target2) {
+      if (!answers.has('p2')) answers.set('p2', steps);
+      if (answers.has('p1')) return answers;
+    }
     getNeighbors(x, y)
       .filter((pos) => canVisit({ x, y }, pos))
       .forEach((pos) => queue.push({ ...pos, steps: steps + 1 }));
   }
+  return answers;
 };
 
-const result = path(start, target);
-console.log(result!.steps);
+const parts = path(target1, start, target2);
 
-// part2
-
-const target2 = 0;
-const path2 = (start: State): State | undefined => {
-  const queue = [start];
-  const visited = new Set<string>();
-  while (queue.length) {
-    const { x, y, steps } = queue.shift()!;
-    const key = `${x},${y}`;
-    if (visited.has(key)) continue;
-    visited.add(key);
-    if (getValue(x, y) === target2) return { x, y, steps };
-    getNeighbors(x, y)
-      .filter((pos) => canVisit({ x, y }, pos, true))
-      .forEach((pos) => queue.push({ ...pos, steps: steps + 1 }));
-  }
-};
-
-const result2 = path2(target);
-console.log(result2!.steps);
+console.log(parts.get('p1'));
+console.log(parts.get('p2'));
