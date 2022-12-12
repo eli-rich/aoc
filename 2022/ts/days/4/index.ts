@@ -36,4 +36,4 @@ const count = input.reduce(
   { part1: 0, part2: 0 },
 );
 
-console.log(count);
+export default count;
