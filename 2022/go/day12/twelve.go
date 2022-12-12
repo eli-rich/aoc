@@ -47,8 +47,7 @@ func Execute() (int, int) {
 		}
 	}
 	target := 0
-	p1 := part1(grid, start, end)
-	p2 := part2(grid, end, target)
+	p1, p2 := solve(grid, end, start, target)
 	return p1, p2
 }
 
@@ -69,58 +68,47 @@ func getNeighbors(grid Grid, x, y int) []Pos {
 	return neighbors
 }
 
-func canVisit(grid Grid, from, to Pos, reverse bool) bool {
+func canVisit(grid Grid, from, to Pos) bool {
 	fromValue := grid[from.x][from.y]
 	toValue := grid[to.x][to.y]
-	if reverse {
-		return fromValue-toValue < 2
-	} else {
-		return toValue-fromValue < 2
-	}
+	return fromValue-toValue < 2
 }
 
-func part1(grid Grid, start, target Pos) int {
+func solve(grid Grid, start, target1 Pos, target2 int) (int, int) {
 	// climb the hill
+	answers := make(map[string]int)
+	answers["p1"] = -1
+	answers["p2"] = -1
 	var queue []Node = []Node{{x: start.x, y: start.y, steps: 0}}
 	visited := make(map[Pos]bool)
 	for len(queue) > 0 {
 		node := queue[0]
 		queue = queue[1:]
-		if node.x == target.x && node.y == target.y {
-			return node.steps
+		if node.x == target1.x && node.y == target1.y {
+			if answers["p1"] == -1 {
+				answers["p1"] = node.steps
+			}
+			if answers["p2"] != -1 {
+				return answers["p1"], answers["p2"]
+			}
+		}
+		if grid[node.x][node.y] == target2 {
+			if answers["p2"] == -1 {
+				answers["p2"] = node.steps
+			}
+			if answers["p1"] != -1 {
+				return answers["p1"], answers["p2"]
+			}
 		}
 		if visited[Pos{x: node.x, y: node.y}] {
 			continue
 		}
 		visited[Pos{x: node.x, y: node.y}] = true
 		for _, neighbor := range getNeighbors(grid, node.x, node.y) {
-			if !visited[neighbor] && canVisit(grid, Pos{x: node.x, y: node.y}, neighbor, false) {
+			if !visited[neighbor] && canVisit(grid, Pos{x: node.x, y: node.y}, neighbor) {
 				queue = append(queue, Node{x: neighbor.x, y: neighbor.y, steps: node.steps + 1})
 			}
 		}
 	}
-	return -1
-}
-
-func part2(grid Grid, start Pos, target int) int {
-	// climb the hill
-	var queue []Node = []Node{{x: start.x, y: start.y, steps: 0}}
-	visited := make(map[Pos]bool)
-	for len(queue) > 0 {
-		node := queue[0]
-		queue = queue[1:]
-		if grid[node.x][node.y] == target {
-			return node.steps
-		}
-		if visited[Pos{x: node.x, y: node.y}] {
-			continue
-		}
-		visited[Pos{x: node.x, y: node.y}] = true
-		for _, neighbor := range getNeighbors(grid, node.x, node.y) {
-			if !visited[neighbor] && canVisit(grid, Pos{x: node.x, y: node.y}, neighbor, true) {
-				queue = append(queue, Node{x: neighbor.x, y: neighbor.y, steps: node.steps + 1})
-			}
-		}
-	}
-	return -1
+	return -1, -1
 }
