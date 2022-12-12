@@ -55,8 +55,6 @@ for (let i = 0; i < trees.length; i++) {
   }
 }
 
-console.log(visible);
-
 // calculate scenic score
 
 /*
@@ -120,4 +118,9 @@ for (let i = 0; i < trees.length; i++) {
   }
 }
 
-console.log(max);
+const answer = {
+  part1: visible,
+  part2: max,
+};
+
+export default answer;
