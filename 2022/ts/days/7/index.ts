@@ -54,11 +54,6 @@ for (const [dir, _] of files) {
   result.push(calculateSum(dir));
 }
 
-console.log(result.length);
-
-console.log(result.filter((val) => val <= 100000).length);
-console.log(result.filter((val) => val <= 100000).reduce((sum, val) => sum + val, 0));
-
 const MAX_FS_SIZE = 70000000;
 const NEED_UNUSED = 30000000;
 
@@ -75,4 +70,9 @@ const smallestDir = [...sizes.entries()]
   .filter(([dir, size]) => size > needed)
   .sort((a, b) => a[1] - b[1])[0];
 
-console.log(smallestDir);
+const answer = {
+  part1: result.filter((val) => val <= 100000).reduce((sum, val) => sum + val, 0),
+  part2: smallestDir[1],
+};
+
+export default answer;
