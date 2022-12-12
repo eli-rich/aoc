@@ -1,4 +1,4 @@
-import { readFile } from 'node:fs/promises';
+import { readFileSync } from 'node:fs';
 
 const convert = {
   A: 'Rock',
@@ -18,7 +18,7 @@ const scoreConvert = {
 type Elf = 'A' | 'B' | 'C';
 type Me = 'X' | 'Y' | 'Z';
 type Stone = 'Rock' | 'Paper' | 'Scissors';
-const input = await readFile('input.txt', 'utf-8');
+const input = readFileSync('input.txt', 'utf-8');
 const lines = input.split('\n');
 
 const elfWins = (elf: Stone, me: Stone) => {
@@ -29,20 +29,18 @@ const elfWins = (elf: Stone, me: Stone) => {
 };
 
 // part one
-let score = 0;
+let score1 = 0;
 for (const line of lines) {
   const elf = convert[line.split(' ')[0] as Elf] as Stone;
   const me = convert[line.split(' ')[1] as Me] as Stone;
   if (elf === me) {
-    score += 3 + scoreConvert[me];
+    score1 += 3 + scoreConvert[me];
   } else if (elfWins(elf, me)) {
-    score += scoreConvert[me];
+    score1 += scoreConvert[me];
   } else {
-    score += 6 + scoreConvert[me];
+    score1 += 6 + scoreConvert[me];
   }
 }
-
-console.log(`Part 1: ${score}`);
 
 // part two
 const getMatch = (elf: Stone, win: boolean): Stone => {
@@ -52,20 +50,25 @@ const getMatch = (elf: Stone, win: boolean): Stone => {
   return 'Rock';
 };
 
-score = 0;
+let score2 = 0;
 for (const line of lines) {
   const elf = convert[line.split(' ')[0] as Elf] as Stone;
   const me = line.split(' ')[1] as Me;
   if (me === 'Y') {
     // draw
-    score += 3 + scoreConvert[elf];
+    score2 += 3 + scoreConvert[elf];
   } else if (me === 'X') {
     // lose
-    score += scoreConvert[getMatch(elf, false)];
+    score2 += scoreConvert[getMatch(elf, false)];
   } else if (me === 'Z') {
     // win
-    score += 6 + scoreConvert[getMatch(elf, true)];
+    score2 += 6 + scoreConvert[getMatch(elf, true)];
   }
 }
 
-console.log(`Part 2: ${score}`);
+const answer = {
+  part1: score1,
+  part2: score2,
+};
+
+export default answer;
