@@ -72,5 +72,9 @@ const path = (start: State, target1: State, target2: number): Map<string, number
 
 const parts = path(target1, start, target2);
 
-console.log(parts.get('p1'));
-console.log(parts.get('p2'));
+const answer = {
+  part1: parts.get('p1'),
+  part2: parts.get('p2'),
+};
+
+export default answer;
