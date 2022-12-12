@@ -27,4 +27,9 @@ for (let i = 0; i < input.length; i++) {
   }
 }
 
-console.log(result1, result2);
+const answer = {
+  part1: result1,
+  part2: result2,
+};
+
+export default answer;
