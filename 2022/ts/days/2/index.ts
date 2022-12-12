@@ -18,7 +18,7 @@ const scoreConvert = {
 type Elf = 'A' | 'B' | 'C';
 type Me = 'X' | 'Y' | 'Z';
 type Stone = 'Rock' | 'Paper' | 'Scissors';
-const input = readFileSync('input.txt', 'utf-8');
+const input = readFileSync('./days/2/input.txt', 'utf-8');
 const lines = input.split('\n');
 
 const elfWins = (elf: Stone, me: Stone) => {
@@ -69,6 +69,7 @@ for (const line of lines) {
 const answer = {
   part1: score1,
   part2: score2,
+  day: 2,
 };
 
 export default answer;

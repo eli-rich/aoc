@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 
-const input = readFileSync('input.txt', 'utf8');
+const input = readFileSync('./days/6/input.txt', 'utf8');
 
 let l4 = [];
 let result1 = 0;
@@ -30,6 +30,7 @@ for (let i = 0; i < input.length; i++) {
 const answer = {
   part1: result1,
   part2: result2,
+  day: 6,
 };
 
 export default answer;

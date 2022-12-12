@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 
-const input = readFileSync('input.txt', 'utf-8').trim().split('\n');
+const input = readFileSync('./days/12/input.txt', 'utf-8').trim().split('\n');
 
 type State = {
   x: number;
@@ -75,6 +75,7 @@ const parts = path(target1, start, target2);
 const answer = {
   part1: parts.get('p1'),
   part2: parts.get('p2'),
+  day: 12,
 };
 
 export default answer;

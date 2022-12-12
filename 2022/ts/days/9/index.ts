@@ -1,6 +1,6 @@
-import { readFileSync } from 'fs';
+import { readFileSync } from 'node:fs';
 
-const input = readFileSync('input.txt', 'utf8').split('\n');
+const input = readFileSync('./days/9/input.txt', 'utf8').split('\n');
 
 type Pos = {
   x: number;
@@ -119,6 +119,7 @@ for (const line of input) {
 const answer = {
   part1: positions.length,
   part2: positions2.length,
+  day: 9,
 };
 
 export default answer;

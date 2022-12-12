@@ -4,5 +4,9 @@
   "type": "module",
   "devDependencies": {
     "bun-types": "^0.3.0"
+  },
+  "dependencies": {
+    "chalk": "^5.2.0",
+    "table": "^6.8.1"
   }
 }

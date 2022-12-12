@@ -3,7 +3,7 @@ import { readFile } from 'node:fs/promises';
 const lower = 'abcdefghijklmnopqrstuvwxyz';
 const upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
-const input = await readFile('input.txt', 'utf-8');
+const input = await readFile('./days/3/input.txt', 'utf-8');
 const lines = input.split('\n');
 
 const findItems = (first: string, second: string) => {
@@ -65,6 +65,7 @@ const result2 = priorities2.reduce((sum, p) => {
 const answer = {
   part1: result,
   part2: result2,
+  day: 3,
 };
 
 export default answer;

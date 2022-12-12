@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 
-const [stackInput, stepInput] = readFileSync('./input.txt', 'utf-8')
+const [stackInput, stepInput] = readFileSync('./days/5/input.txt', 'utf-8')
   .replaceAll('\r', '')
   .split('\n\n');
 
@@ -49,6 +49,7 @@ stepInput
 const answer = {
   part1: stacks.map((stack) => stack[0]).join(''),
   part2: stacks2.map((stack) => stack[0]).join(''),
+  day: 5,
 };
 
 export default answer;

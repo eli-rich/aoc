@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 
-const input = readFileSync('input.txt', 'utf-8').trim().split('\n\n');
+const input = readFileSync('./days/11/input.txt', 'utf-8').trim().split('\n\n');
 
 type Operation = string;
 
@@ -107,7 +107,6 @@ for (let i = 0; i < ROUND_NUMBER; i++) {
   }
 }
 const [top1, top2] = getTop2(monkeys);
-console.log(top1.inspections * top2.inspections);
 
 const ROUND_NUMBER2 = 10_000;
 
@@ -128,6 +127,7 @@ const [secondTop1, secondTop2] = getTop2(clonedMonkeys);
 const answer = {
   part1: top1.inspections * top2.inspections,
   part2: secondTop1.inspections * secondTop2.inspections,
+  day: 11,
 };
 
 export default answer;

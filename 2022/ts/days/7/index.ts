@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 
-const input = readFileSync('./input.txt', 'utf-8')
+const input = readFileSync('./days/7/input.txt', 'utf-8')
   .trim()
   .split('$')
   .filter((line) => line.length > 0)
@@ -73,6 +73,7 @@ const smallestDir = [...sizes.entries()]
 const answer = {
   part1: result.filter((val) => val <= 100000).reduce((sum, val) => sum + val, 0),
   part2: smallestDir[1],
+  day: 7,
 };
 
 export default answer;

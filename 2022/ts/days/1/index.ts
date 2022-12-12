@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 
-const chunks = readFileSync('input.txt', 'utf8')
+const chunks = readFileSync('./days/1/input.txt', 'utf8')
   .trim()
   .split('\n\n')
   .map((chunk) =>
@@ -14,6 +14,7 @@ const chunks = readFileSync('input.txt', 'utf8')
 const answer = {
   part1: chunks[0],
   part2: chunks[0] + chunks[1] + chunks[2],
+  day: 1,
 };
 
 export default answer;

@@ -24,29 +24,31 @@ const charMap: CharMap = {
   '####\n...#\n..#.\n.#..\n#...\n####': 'Z',
 };
 
-const input = readFileSync('out.txt', 'utf8').trim();
-const lines = input.split('\n');
+const ocrRead = (input: string): string => {
+  const lines = input.split('\n');
 
-// split into 4x6 blocks
-const blocks: string[] = [];
-for (let i = 0; i < lines.length; i += 6) {
-  for (let j = 0; j < lines[i].length; j += 5) {
-    blocks.push(
-      lines
-        .slice(i, i + 6)
-        .map((line) => line.slice(j, j + 5))
-        .join('\n'),
-    );
+  // split into 4x6 blocks
+  const blocks: string[] = [];
+  for (let i = 0; i < lines.length; i += 6) {
+    for (let j = 0; j < lines[i].length; j += 5) {
+      blocks.push(
+        lines
+          .slice(i, i + 6)
+          .map((line) => line.slice(j, j + 5))
+          .join('\n'),
+      );
+    }
   }
-}
 
-const letters = blocks.map((block) =>
-  block
-    .split('\n')
-    .map((line) => line.slice(0, line.length - 1))
-    .join('\n'),
-);
+  const letters = blocks.map((block) =>
+    block
+      .split('\n')
+      .map((line) => line.slice(0, line.length - 1))
+      .join('\n'),
+  );
 
-const output = letters.map((letter) => charMap[letter]).join('');
+  const output = letters.map((letter) => charMap[letter]).join('');
+  return output;
+};
 
-console.log(output);
+export default ocrRead;

@@ -24,7 +24,7 @@ const fullContains = (range1: string, range2: string) => {
   return new Set([...set1].filter((x) => set2.has(x))).size > 0;
 };
 
-const input = readFileSync('input.txt', 'utf8').trim().split('\n');
+const input = readFileSync('./days/4/input.txt', 'utf8').trim().split('\n');
 
 const count = input.reduce(
   (scores, line) => {
@@ -36,4 +36,4 @@ const count = input.reduce(
   { part1: 0, part2: 0 },
 );
 
-export default count;
+export default { ...count, day: 4 };

@@ -1,6 +1,6 @@
 import { readFileSync } from 'fs';
 
-const input = readFileSync('input.txt', 'utf8').trim().split('\n');
+const input = readFileSync('./days/10/input.txt', 'utf8').trim().split('\n');
 
 type Instruction = {
   op: 'noop' | 'addx';
@@ -96,6 +96,7 @@ const cycleSum = () => {
 const answer = {
   part1: cycleSum(),
   part2: draw,
+  day: 10,
 };
 
 export default answer;

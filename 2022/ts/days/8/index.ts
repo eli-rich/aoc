@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 
-const input = readFileSync('input.txt', 'utf-8');
+const input = readFileSync('./days/8/input.txt', 'utf-8');
 
 const trees = input.split('\n').map((line) => line.split('').map((ch) => parseInt(ch)));
 
@@ -121,6 +121,8 @@ for (let i = 0; i < trees.length; i++) {
 const answer = {
   part1: visible,
   part2: max,
+  day: 8,
+  time: 0,
 };
 
 export default answer;
