@@ -26,9 +26,6 @@ const target: State = grid.flatMap((row, y) =>
   row.flatMap((value, x) => (value === 26 ? { x, y, steps: 0 } : [])),
 )[0];
 
-console.log(start);
-console.log(target);
-
 const getNeighbors = (x: number, y: number) => {
   const neighbors = [];
   if (x > 0) neighbors.push({ x: x - 1, y });
@@ -40,10 +37,10 @@ const getNeighbors = (x: number, y: number) => {
 
 const getValue = (x: number, y: number) => grid[y][x];
 
-const canVisit = (from: Pos, to: Pos) => {
+const canVisit = (from: Pos, to: Pos, reverse: boolean = false) => {
   const fromValue = getValue(from.x, from.y);
   const toValue = getValue(to.x, to.y);
-  return toValue - fromValue < 2;
+  return reverse ? fromValue - toValue < 2 : toValue - fromValue < 2;
 };
 
 const path = (start: State, target: State): State | undefined => {
@@ -64,15 +61,23 @@ const path = (start: State, target: State): State | undefined => {
 const result = path(start, target);
 console.log(result!.steps);
 
-// get all positions with a value of 0
-const positions = grid.flatMap((row, y) =>
-  row.flatMap((value, x) => (value === 0 ? { x, y } : [])),
-);
+// part2
 
-// find the best position to start from
-const best = positions
-  .map((pos) => path({ ...pos, steps: 0 }, target))
-  .filter((pos) => pos !== undefined)
-  .sort((a, b) => a!.steps - b!.steps)[0];
+const target2 = 0;
+const path2 = (start: State): State | undefined => {
+  const queue = [start];
+  const visited = new Set<string>();
+  while (queue.length) {
+    const { x, y, steps } = queue.shift()!;
+    const key = `${x},${y}`;
+    if (visited.has(key)) continue;
+    visited.add(key);
+    if (getValue(x, y) === target2) return { x, y, steps };
+    getNeighbors(x, y)
+      .filter((pos) => canVisit({ x, y }, pos, true))
+      .forEach((pos) => queue.push({ ...pos, steps: steps + 1 }));
+  }
+};
 
-console.log(best!.steps);
+const result2 = path2(target);
+console.log(result2!.steps);
