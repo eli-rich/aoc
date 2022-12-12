@@ -2,9 +2,6 @@ import { readFileSync } from 'node:fs';
 
 const input = readFileSync('input.txt', 'utf-8').trim().split('\n');
 
-const alphabet = 'abcdefghijklmnopqrstuvwxyzE';
-const grid = input.map((line) => line.split('').map((c) => alphabet.indexOf(c)));
-
 type State = {
   x: number;
   y: number;
@@ -15,6 +12,22 @@ type Pos = {
   x: number;
   y: number;
 };
+
+const alphabet = 'abcdefghijklmnopqrstuvwxyzE';
+const grid = input.map((line) => line.split('').map((c) => alphabet.indexOf(c)));
+
+// get start position
+const start: State = grid.flatMap((row, y) =>
+  row.flatMap((value, x) => (value === -1 ? { x, y, steps: 0 } : [])),
+)[0];
+
+// get target position
+const target: State = grid.flatMap((row, y) =>
+  row.flatMap((value, x) => (value === 26 ? { x, y, steps: 0 } : [])),
+)[0];
+
+console.log(start);
+console.log(target);
 
 const getNeighbors = (x: number, y: number) => {
   const neighbors = [];
@@ -27,16 +40,13 @@ const getNeighbors = (x: number, y: number) => {
 
 const getValue = (x: number, y: number) => grid[y][x];
 
-const target = alphabet.indexOf('E');
-const start: State = { x: 0, y: 0, steps: 0 };
-
 const canVisit = (from: Pos, to: Pos) => {
   const fromValue = getValue(from.x, from.y);
   const toValue = getValue(to.x, to.y);
   return toValue - fromValue < 2;
 };
 
-const path = (start: State, target: number): State | undefined => {
+const path = (start: State, target: State): State | undefined => {
   const queue = [start];
   const visited = new Set<string>();
   while (queue.length) {
@@ -44,7 +54,7 @@ const path = (start: State, target: number): State | undefined => {
     const key = `${x},${y}`;
     if (visited.has(key)) continue;
     visited.add(key);
-    if (getValue(x, y) === target) return { x, y, steps };
+    if (x === target.x && y === target.y) return { x, y, steps };
     getNeighbors(x, y)
       .filter((pos) => canVisit({ x, y }, pos))
       .forEach((pos) => queue.push({ ...pos, steps: steps + 1 }));
@@ -52,7 +62,7 @@ const path = (start: State, target: number): State | undefined => {
 };
 
 const result = path(start, target);
-console.log(result!.steps - 2);
+console.log(result!.steps);
 
 // get all positions with a value of 0
 const positions = grid.flatMap((row, y) =>
