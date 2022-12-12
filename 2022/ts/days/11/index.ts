@@ -125,4 +125,9 @@ for (let i = 0; i < ROUND_NUMBER2; i++) {
 
 const [secondTop1, secondTop2] = getTop2(clonedMonkeys);
 
-console.log(secondTop1.inspections * secondTop2.inspections);
+const answer = {
+  part1: top1.inspections * top2.inspections,
+  part2: secondTop1.inspections * secondTop2.inspections,
+};
+
+export default answer;
