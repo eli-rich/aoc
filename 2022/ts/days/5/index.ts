@@ -46,5 +46,9 @@ stepInput
     stacks2[to].unshift(...crates);
   });
 
-console.log(stacks.map((stack) => stack[0]).join(''));
-console.log(stacks2.map((stack) => stack[0]).join(''));
+const answer = {
+  part1: stacks.map((stack) => stack[0]).join(''),
+  part2: stacks2.map((stack) => stack[0]).join(''),
+};
+
+export default answer;
