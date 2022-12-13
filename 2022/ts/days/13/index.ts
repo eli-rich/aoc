@@ -21,11 +21,11 @@ const compare = (left: Packet, right: Packet): Result | undefined => {
   }
   if (Array.isArray(left) && Array.isArray(right)) {
     for (let i = 0; i < left.length; i++) {
-      if (right[i] === undefined) return -1;
+      if (right[i] === undefined) return Result.False;
       const result = compare(left[i], right[i]);
       if (result !== Result.Continue) return result;
     }
-    if (left.length < right.length) return 1;
+    if (left.length < right.length) return Result.True;
     else return Result.Continue;
   }
   if (typeof left === 'number') return compare([left], right);
