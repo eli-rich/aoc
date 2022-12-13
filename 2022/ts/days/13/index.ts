@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 
-const chunks = readFileSync('input.txt', 'utf-8').trim().split('\n\n');
+const chunks = readFileSync('./days/13/input.txt', 'utf-8').trim().split('\n\n');
 
 const packets = chunks.map((chunk) => chunk.split('\n').map((l) => JSON.parse(l)));
 
@@ -31,11 +31,9 @@ for (const packet of packets) {
   const result = compare(left, right);
   if (result === 1) sum += packets.findIndex((p) => p === packet) + 1;
 }
-// part 1 answer
-console.log(sum);
 
 // part 2
-const input = readFileSync('input.txt', 'utf-8')
+const input = readFileSync('./days/13/input.txt', 'utf-8')
   .trim()
   .split('\n')
   .filter((i) => i !== '')
@@ -49,4 +47,10 @@ const sortedPackets = input.sort((a, b) => compare(b, a));
 const divider1 = sortedPackets.findIndex((p) => JSON.stringify(p) === JSON.stringify([[6]])) + 1;
 const divider2 = sortedPackets.findIndex((p) => JSON.stringify(p) === JSON.stringify([[2]])) + 1;
 
-console.log(divider1 * divider2);
+const answer = {
+  part1: sum,
+  part2: divider1 * divider2,
+  day: 13,
+};
+
+export default answer;
