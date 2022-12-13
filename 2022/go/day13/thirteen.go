@@ -3,7 +3,6 @@ package day13
 import (
 	_ "embed"
 	"encoding/json"
-	"reflect"
 	"sort"
 	"strings"
 
@@ -57,89 +56,42 @@ func Execute() (int, int) {
 }
 
 func compare(left, right interface{}) int {
-	if reflect.TypeOf(left).Kind() == reflect.Float64 && reflect.TypeOf(right).Kind() == reflect.Float64 {
-		if left.(float64) < right.(float64) {
+	// compare numbers
+	leftNum, numOK := left.(float64)
+	rightNum, numOK2 := right.(float64)
+	if numOK && numOK2 {
+		if leftNum < rightNum {
 			return 1
-		} else if left.(float64) > right.(float64) {
+		} else if leftNum > rightNum {
 			return -1
 		}
 		return 0
 	}
-	if reflect.TypeOf(left).Kind() == reflect.Slice && reflect.TypeOf(right).Kind() == reflect.Slice {
-		switch left.(type) {
-		case []float64:
-			switch right.(type) {
-			case []float64:
-				for i := 0; i < len(left.([]float64)); i++ {
-					if i > len(right.([]float64))-1 {
-						return -1
-					}
-					result := compare(left.([]float64)[i], right.([]float64)[i])
-					if result != 0 {
-						return result
-					}
-				}
-				if len(left.([]float64)) < len(right.([]float64)) {
-					return 1
-				}
-				return 0
-			case []interface{}:
-				for i := 0; i < len(left.([]float64)); i++ {
-					if i > len(right.([]interface{}))-1 {
-						return -1
-					}
-					result := compare(left.([]float64)[i], right.([]interface{})[i])
-					if result != 0 {
-						return result
-					}
-				}
-				if len(left.([]float64)) < len(right.([]interface{})) {
-					return 1
-				}
-				return 0
+	// compare arrays
+	leftArr, arrOk := left.([]interface{})
+	rightArr, arrOk2 := right.([]interface{})
+	if arrOk && arrOk2 {
+		for i := 0; i < len(leftArr); i++ {
+			if i >= len(rightArr) {
+				return -1
 			}
-		case []interface{}:
-			switch right.(type) {
-			case []interface{}:
-				for i := 0; i < len(left.([]interface{})); i++ {
-					if i > len(right.([]interface{}))-1 {
-						return -1
-					}
-					result := compare(left.([]interface{})[i], right.([]interface{})[i])
-					if result != 0 {
-						return result
-					}
-				}
-				if len(left.([]interface{})) < len(right.([]interface{})) {
-					return 1
-				}
-				return 0
-			case []float64:
-				for i := 0; i < len(left.([]interface{})); i++ {
-					if i > len(right.([]float64))-1 {
-						return -1
-					}
-					result := compare(left.([]interface{})[i], right.([]float64)[i])
-					if result != 0 {
-						return result
-					}
-				}
-				if len(left.([]interface{})) < len(right.([]float64)) {
-					return 1
-				}
-				return 0
+			result := compare(leftArr[i], rightArr[i])
+			if result != 0 {
+				return result
 			}
+		}
+		if len(leftArr) < len(rightArr) {
+			return 1
 		}
 		return 0
 	}
-	if reflect.TypeOf(left).Kind() == reflect.Float64 {
-		arrLeft := make([]float64, 0)
-		arrLeft = append(arrLeft, left.(float64))
-		return compare(arrLeft, right)
-	} else if reflect.TypeOf(right).Kind() == reflect.Float64 {
-		arrRight := make([]float64, 0)
-		arrRight = append(arrRight, right.(float64))
-		return compare(left, arrRight)
+	// compare mismatched types
+	if numOK && !numOK2 {
+		leftArr = []interface{}{left}
+		return compare(leftArr, right)
+	} else if !numOK && numOK2 {
+		rightArr = []interface{}{right}
+		return compare(left, rightArr)
 	}
 	return -100
 }
