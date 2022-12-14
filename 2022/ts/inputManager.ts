@@ -1,9 +1,9 @@
 import { readFile } from 'node:fs/promises';
-import { dirname, join } from 'node:path';
+import { dirname } from 'node:path';
 
 const __dirname = dirname(new URL(import.meta.url).pathname);
 
-const getInput = async (day: number) => {
+const getInput = (day: number) => {
   return inputs.get(day)!;
 };
 

@@ -1,6 +1,7 @@
+import { loadInput } from '../../inputManager.js';
 import getInput from '../../inputManager.js';
-
-const input = (await getInput(14)).trim();
+await loadInput(14);
+const input = getInput(14).trim();
 
 type Point = {
   x: number;
@@ -30,7 +31,6 @@ const segments = input
     return seg;
   }, [] as Line[]);
 
-const grid: Grid = [];
 // find smallest x and y
 const minX =
   segments.reduce((min, { start, end }) => {
@@ -70,6 +70,7 @@ segments.push({
     y: minY,
   },
 });
+const grid: Grid = [];
 // fill grid with points from min to max
 for (let j = Math.min(minY, 0); j <= Math.max(maxY, 0); j++) {
   for (let i = Math.min(minX, 500); i <= Math.max(maxX, 500); i++) {
