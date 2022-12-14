@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import getInput from '../../inputManager.js';
 
 const convert = {
   A: 'Rock',
@@ -18,7 +18,7 @@ const scoreConvert = {
 type Elf = 'A' | 'B' | 'C';
 type Me = 'X' | 'Y' | 'Z';
 type Stone = 'Rock' | 'Paper' | 'Scissors';
-const input = readFileSync('./days/2/input.txt', 'utf-8');
+const input = await getInput(2);
 const lines = input.split('\n');
 
 const elfWins = (elf: Stone, me: Stone) => {
