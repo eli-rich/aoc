@@ -1,9 +1,9 @@
-import { readFile } from 'node:fs/promises';
+import getInput from '../../inputManager.js';
 
 const lower = 'abcdefghijklmnopqrstuvwxyz';
 const upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
-const input = await readFile('./days/3/input.txt', 'utf-8');
+const input = await getInput(3);
 const lines = input.split('\n');
 
 const findItems = (first: string, second: string) => {

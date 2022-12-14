@@ -6,7 +6,7 @@
     "bun-types": "^0.3.0"
   },
   "dependencies": {
-    "chalk": "^5.2.0",
+    "picocolors": "^1.0.0",
     "table": "^6.8.1"
   }
 }

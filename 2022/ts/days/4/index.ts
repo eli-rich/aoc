@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import getInput from '../../inputManager.js';
 
 const range = (start: number, end: number) => {
   const arr = [];
@@ -24,7 +24,7 @@ const fullContains = (range1: string, range2: string) => {
   return new Set([...set1].filter((x) => set2.has(x))).size > 0;
 };
 
-const input = readFileSync('./days/4/input.txt', 'utf8').trim().split('\n');
+const input = (await getInput(4)).trim().split('\n');
 
 const count = input.reduce(
   (scores, line) => {

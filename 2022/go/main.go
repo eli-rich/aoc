@@ -24,7 +24,7 @@ import (
 
 type DayFunc = func() (time.Duration, string, string)
 
-const ITERATIONS = 1
+const ITERATIONS = 250
 const CURRENT_DAY = 13
 
 func main() {

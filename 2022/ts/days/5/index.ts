@@ -1,8 +1,6 @@
-import { readFileSync } from 'node:fs';
+import getInput from '../../inputManager.js';
 
-const [stackInput, stepInput] = readFileSync('./days/5/input.txt', 'utf-8')
-  .replaceAll('\r', '')
-  .split('\n\n');
+const [stackInput, stepInput] = (await getInput(5)).replaceAll('\r', '').split('\n\n');
 
 // THANK YOU LEBSTER
 const stacks = stackInput

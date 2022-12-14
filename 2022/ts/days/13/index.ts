@@ -1,6 +1,6 @@
-import { readFileSync } from 'node:fs';
+import getInput from '../../inputManager.js';
 
-const chunks = readFileSync('./days/13/input.txt', 'utf-8').trim().split('\n\n');
+const chunks = (await getInput(13)).trim().split('\n\n');
 
 const packets = chunks.map((chunk) => chunk.split('\n').map((l) => JSON.parse(l)));
 
@@ -42,7 +42,7 @@ for (const packet of packets) {
 }
 
 // part 2
-const input = readFileSync('./days/13/input.txt', 'utf-8')
+const input = (await getInput(13))
   .trim()
   .split('\n')
   .filter((i) => i !== '')

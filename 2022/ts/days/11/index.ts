@@ -1,6 +1,6 @@
-import { readFileSync } from 'node:fs';
+import getInput from '../../inputManager.js';
 
-const input = readFileSync('./days/11/input.txt', 'utf-8').trim().split('\n\n');
+const input = (await getInput(11)).trim().split('\n\n');
 
 type Operation = string;
 

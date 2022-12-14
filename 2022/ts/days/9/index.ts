@@ -1,6 +1,6 @@
-import { readFileSync } from 'node:fs';
+import getInput from '../../inputManager.js';
 
-const input = readFileSync('./days/9/input.txt', 'utf8').split('\n');
+const input = (await getInput(9)).split('\n');
 
 type Pos = {
   x: number;

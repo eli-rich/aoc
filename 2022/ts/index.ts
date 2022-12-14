@@ -1,7 +1,7 @@
-import chalk from 'chalk';
 import { readdir } from 'node:fs/promises';
-
+import pc from 'picocolors';
 import { table } from 'table';
+import { loadInput } from './inputManager.js';
 
 import ocrRead from './ocr.js';
 
@@ -11,6 +11,8 @@ type Answer = {
   day: number;
   time?: number;
 };
+
+await loadInput(14);
 
 const dirs = await readdir('./days');
 const filesToImport = async () => {
@@ -43,7 +45,7 @@ const answers = [...importMap.entries()]
   });
 
 const t = table([
-  [chalk.green('Day'), 'Part 1', 'Part 2'],
+  [pc.green('Day'), pc.green('Part 1'), pc.green('Part 2')],
   ...answers.map(({ day, part1, part2 }) => [day, part1, part2]),
 ]);
 

@@ -1,6 +1,6 @@
-import { readFileSync } from 'node:fs';
+import getInput from '../../inputManager.js';
 
-const input = readFileSync('./days/14/input.txt', 'utf-8').trim();
+const input = (await getInput(14)).trim();
 
 type Point = {
   x: number;

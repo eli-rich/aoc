@@ -1,6 +1,6 @@
-import { readFileSync } from 'node:fs';
+import getInput from '../../inputManager.js';
 
-const input = readFileSync('./days/8/input.txt', 'utf-8');
+const input = await getInput(8);
 
 const trees = input.split('\n').map((line) => line.split('').map((ch) => parseInt(ch)));
 

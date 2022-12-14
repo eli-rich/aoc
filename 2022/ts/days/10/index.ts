@@ -1,6 +1,6 @@
-import { readFileSync } from 'fs';
+import getInput from '../../inputManager.js';
 
-const input = readFileSync('./days/10/input.txt', 'utf8').trim().split('\n');
+const input = (await getInput(10)).trim().split('\n');
 
 type Instruction = {
   op: 'noop' | 'addx';
