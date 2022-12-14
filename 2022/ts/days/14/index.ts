@@ -108,24 +108,6 @@ const drawSegments = (segments: Line[], grid: Grid) => {
   }
 };
 
-const draw = (grid: Grid) => {
-  let str = '';
-  for (let j = minY; j <= maxY; j++) {
-    for (let i = minX; i <= maxX; i++) {
-      const point = grid[j][i];
-      if (point === undefined) continue;
-      if (point.segment) str += '#';
-      else if (point.sand) str += 'o';
-      else str += ' ';
-    }
-    str += '\n';
-  }
-  // reverse y axis
-  const lines = str.split('\n');
-  lines.reverse();
-  return lines.join('\n');
-};
-
 drawSegments(segments, grid);
 
 const belowOccupied = (grid: Grid, point: Point) => {
@@ -184,6 +166,24 @@ for (let i = 0; i < 100_000; i++) {
     break;
   }
 }
+
+const draw = (grid: Grid) => {
+  let str = '';
+  for (let j = minY; j <= maxY; j++) {
+    for (let i = minX; i <= maxX; i++) {
+      const point = grid[j][i];
+      if (point === undefined) continue;
+      if (point.segment) str += '#';
+      else if (point.sand) str += 'o';
+      else str += ' ';
+    }
+    str += '\n';
+  }
+  // reverse y axis
+  const lines = str.split('\n');
+  lines.reverse();
+  return lines.join('\n');
+};
 
 const answer = {
   part1: p1,
