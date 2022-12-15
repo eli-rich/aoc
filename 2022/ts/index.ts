@@ -12,7 +12,7 @@ type Answer = {
   time?: number;
 };
 
-await loadInput(14);
+await loadInput(15);
 
 const dirs = await readdir('./days');
 const filesToImport = async () => {
