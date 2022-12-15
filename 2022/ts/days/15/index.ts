@@ -37,55 +37,18 @@ for (const line of lines) {
 
 const minSensorX = Math.min(...sensors.map((s) => s.x));
 const maxSensorX = Math.max(...sensors.map((s) => s.x));
-const minSensorY = Math.min(...sensors.map((s) => s.y));
-const maxSensorY = Math.max(...sensors.map((s) => s.y));
 
 const minBeaconX = Math.min(...beacons.map((b) => b.x));
 const maxBeaconX = Math.max(...beacons.map((b) => b.x));
-const minBeaconY = Math.min(...beacons.map((b) => b.y));
-const maxBeaconY = Math.max(...beacons.map((b) => b.y));
 
-let minX = Math.min(minSensorX, minBeaconX);
-let maxX = Math.max(maxSensorX, maxBeaconX);
-let minY = Math.min(minSensorY, minBeaconY);
-let maxY = Math.max(maxSensorY, maxBeaconY);
+const minX = Math.min(minSensorX, minBeaconX);
+const maxX = Math.max(maxSensorX, maxBeaconX);
 
 const dist = (a: Point, b: Point) => {
   const { x: ax, y: ay } = a;
   const { x: bx, y: by } = b;
   return Math.abs(ax - bx) + Math.abs(ay - by);
 };
-
-const free = (y: number) => {
-  let count = 0;
-
-  for (let x = minX; x <= maxX; x++) {
-    const hasBeacon = beacons.some((b) => b.x === x && b.y === y);
-    if (hasBeacon) continue;
-
-    const canSee = sensors.some((s) => {
-      const d = dist(s, { x, y });
-      const range = dist(s, s.beacon);
-      return d <= range;
-    });
-
-    if (canSee) continue;
-
-    count++;
-  }
-  return maxX - minX - count;
-};
-
-const part1 = free(2_000_000);
-
-// part 2
-
-minX = 0;
-maxX = 4000000;
-minY = 0;
-maxY = 4000000;
-
-sensors.sort((a, b) => a.x - b.x);
 
 const freePoint = (point: Point) => {
   const { x, y } = point;
@@ -102,35 +65,69 @@ const freePoint = (point: Point) => {
   return true;
 };
 
+const checkRow = (y: number) => {
+  let count = 0;
+  for (let x = minX; x <= maxX; x++) {
+    const point = { x, y };
+    if (freePoint(point)) count++;
+    for (const s of sensors) {
+      const d = dist(s, point);
+      const range = dist(s, s.beacon);
+      if (d <= range) {
+        x = s.x + (range - Math.abs(s.y - y)) + 1;
+        if (x > maxX) break;
+        if (freePoint({ x, y })) count++;
+      }
+    }
+  }
+  return maxX - minX - count;
+};
+
+const minBoundX = 0;
+const maxBoundX = 4_000_000;
+const minBoundY = 0;
+const maxBoundY = 4_000_000;
+
+let part1 = 0;
+
+let onlyFree: Point | undefined;
+sensors.sort((a, b) => a.x - b.x);
 const calc = () => {
-  for (let y = minY; y <= maxY; y++) {
-    for (let x = minX; x <= maxX; x++) {
-      const point = { x, y };
-      if (freePoint(point)) {
-        return point;
+  for (let y = minBoundY; y <= maxBoundY; y++) {
+    if (y === 2_000_000) {
+      part1 = checkRow(y);
+    }
+    for (let x = minBoundX; x <= maxBoundX; x++) {
+      if (freePoint({ x, y })) {
+        onlyFree = { x, y };
+        return;
       }
       for (const s of sensors) {
-        const d = dist(s, point);
+        const d = dist(s, { x, y });
         const range = dist(s, s.beacon);
         if (d <= range) {
           x = s.x + (range - Math.abs(s.y - y)) + 1;
-          if (x > maxX) break;
+          if (x > maxBoundX) break;
           if (freePoint({ x, y })) {
-            return { x, y } as Point;
+            onlyFree = { x, y };
+            return;
           }
         }
       }
     }
   }
 };
-
-const point = calc()!;
-const part2 = point.x * 4_000_000 + point.y;
+calc();
+console.log(onlyFree);
+if (onlyFree === undefined) throw new Error('No free point found');
+let part2 = onlyFree.x * 4_000_000 + onlyFree.y;
 
 const answer = {
   part1,
   part2,
   day: 15,
 };
+
+console.log(answer);
 
 export default answer;
