@@ -3,7 +3,6 @@ package day15
 import (
 	_ "embed"
 	"fmt"
-	"math"
 	"sort"
 	"strings"
 
@@ -75,9 +74,15 @@ func minMaxX(sensors []Sensor) (int, int) {
 	return minX, maxX
 }
 func dist(a Point, b Point) int {
-	ax, ay := float64(a.x), float64(a.y)
-	bx, by := float64(b.x), float64(b.y)
-	return int(math.Abs(ax-bx) + math.Abs(ay-by))
+	dX := (a.x - b.x)
+	dY := (a.y - b.y)
+	if dX < 0 {
+		dX = -dX
+	}
+	if dY < 0 {
+		dY = -dY
+	}
+	return dX + dY
 }
 func initalizeSensorRanges(sensors []Sensor) {
 	for i, sensor := range sensors {
@@ -87,11 +92,13 @@ func initalizeSensorRanges(sensors []Sensor) {
 }
 
 func freePoint(sensors []Sensor, point Point) bool {
-	canSee := aocutils.ArraySome(sensors, func(sensor Sensor) bool {
+	for _, sensor := range sensors {
 		d := dist(sensor.point, point)
-		return d <= sensor.viewRange
-	})
-	return !canSee
+		if d <= sensor.viewRange {
+			return false
+		}
+	}
+	return true
 }
 
 func checkRow(y, minX, maxX int, sensors []Sensor) int {
@@ -104,13 +111,13 @@ func checkRow(y, minX, maxX int, sensors []Sensor) int {
 		for _, sensor := range sensors {
 			d := dist(sensor.point, point)
 			if d <= sensor.viewRange {
-				yAbs := int(math.Abs(float64(sensor.point.y - y)))
+				yAbs := sensor.point.y - y
+				if yAbs < 0 {
+					yAbs = -yAbs
+				}
 				x = sensor.point.x + (sensor.viewRange - yAbs)
 				if x > maxX {
 					break
-				}
-				if freePoint(sensors, Point{x, y}) {
-					count++
 				}
 			}
 		}
@@ -135,13 +142,13 @@ func calc(sensors []Sensor) Point {
 			for _, sensor := range sensors {
 				d := dist(sensor.point, point)
 				if d <= sensor.viewRange {
-					yAbs := int(math.Abs(float64(sensor.point.y - y)))
+					yAbs := sensor.point.y - y
+					if yAbs < 0 {
+						yAbs = -yAbs
+					}
 					x = sensor.point.x + (sensor.viewRange - yAbs)
 					if x > maxBoundX {
 						break
-					}
-					if freePoint(sensors, Point{x, y}) {
-						return Point{x, y}
 					}
 				}
 			}

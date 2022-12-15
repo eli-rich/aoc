@@ -76,12 +76,13 @@ func sim(fn DayFunc) (time.Duration, string, string) {
 		times[i] = elapsed
 		p1, p2 = part1, part2
 	}
-	avg := time.Duration(0)
+	shortest := times[0]
 	for _, t := range times {
-		avg += t
+		if t < shortest {
+			shortest = t
+		}
 	}
-	avg /= ITERATIONS
-	return avg, p1, p2
+	return shortest, p1, p2
 }
 
 func d1() (time.Duration, string, string) {
