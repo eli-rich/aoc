@@ -182,8 +182,7 @@ const startingResources: Resources = {
 // part 2
 let max = 0;
 const scores: number[] = [];
-for (const [bpIndex, bp] of blueprints.slice(0, 1).entries()) {
-  const simulations: Simulation[] = [];
+for (const [bpIndex, bp] of blueprints.slice(0, 3).entries()) {
   for (let i = 0; i < 5_000_000; i++) {
     const sim = new Simulation(bp, { ...startingResources }, 32);
     while (sim.currentTime < sim.time) {
