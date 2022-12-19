@@ -6,6 +6,7 @@
     "bun-types": "^0.3.0"
   },
   "dependencies": {
+    "@types/node": "^18.11.17",
     "picocolors": "^1.0.0",
     "table": "^6.8.1"
   }
