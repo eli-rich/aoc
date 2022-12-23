@@ -280,4 +280,4 @@ while (true) {
   update(grid);
 }
 
-console.log(round + 10);
+console.log(round + 9);
