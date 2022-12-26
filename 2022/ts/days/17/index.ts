@@ -1,220 +1,201 @@
-import { readFileSync } from 'fs';
-
-const input = readFileSync('test.txt', 'utf-8').trim();
-
-const shapes = [
-  [[1, 1, 1, 1]],
-  [
-    [0, 1, 0],
-    [1, 1, 1],
-    [0, 1, 0],
-  ],
-  [
-    [0, 0, 1],
-    [0, 0, 1],
-    [1, 1, 1],
-  ],
-  [[1], [1], [1], [1]],
-  [
-    [1, 1],
-    [1, 1],
-  ],
-];
+import { readFileSync } from 'node:fs';
+// https://github.com/LebsterFace/AdventOfCode-2022/blob/master/solutions/day17/common.ts
+const input = [...readFileSync('input.txt', 'utf-8').trim()] as Array<'<' | '>'>;
 
 const WIDTH = 7;
-const HEIGHT = 15;
 
-const draw = (grid: number[][]) => {
-  // if occupied, draw a #, otherwise a .
-  return grid.map((row) => row.map((cell) => (cell === 1 ? '#' : '.')).join('')).join('\n');
-};
+const grid: boolean[][] = [Array(WIDTH).fill(true)];
 
-const placeShape = (grid: number[][], shape: number[][], x: number, y: number) => {
-  for (let i = 0; i < shape.length; i++) {
-    for (let j = 0; j < shape[i].length; j++) {
-      grid[y + i][x + j] = shape[i][j];
-    }
-  }
-  // return the left, right, top, and bottom edges of the shape
+const SHAPE_DEFINITIONS = `####
+
+.#.
+###
+.#.
+
+..#
+..#
+###
+
+#
+#
+#
+#
+
+##
+##`;
+
+const shapes = SHAPE_DEFINITIONS.split('\n\n').map(s =>
+  s
+    .split('\n')
+    .reverse()
+    .map(r => Array.from(r, c => c === '#')),
+);
+
+let shapeIndex = 0;
+
+const next = (): { shape: boolean[][]; x: number; y: number } => {
+  if (shapeIndex >= shapes.length) shapeIndex = 0;
   return {
-    left: x,
-    right: x + Math.max(...shape.map((row) => row.length)) - 1,
-    top: y,
-    bottom: y + shape.length - 1,
+    shape: shapes[shapeIndex++],
+    x: 2,
+    y: 3,
   };
 };
 
-const checkLeft = (grid: number[][], shape: number[][], x: number, y: number) => {
-  // check if the shape can move left
-  // return false if out of bounds
-  // or if there is a collision
-  if (x === 0) return false;
-  for (let i = 0; i < shape.length; i++) {
-    if (grid[y + i][x - 1] === 1) return false;
-  }
-  return true;
-};
+let current = next();
 
-const checkRight = (grid: number[][], shape: number[][], x: number, y: number) => {
-  // check if the shape can move right
-  // return false if out of bounds
-  // or if there is a collision
-  if (x === WIDTH - shape[0].length) return false;
-  for (let i = 0; i < shape.length; i++) {
-    if (grid[y + i][x + shape[0].length] === 1) return false;
+const place = () => {
+  while (grid.length < grid.length + current.y + current.shape.length) {
+    grid.push(Array(WIDTH).fill(false));
+    current.y--;
   }
-  return true;
-};
+  const curAbsY = grid.length + current.y;
+  for (let y = grid.length - 1; y >= 0; y--) {
+    const row = grid[y];
+    for (let x = 0; x < WIDTH; x++) {
+      const atSign =
+        y >= curAbsY &&
+        y < curAbsY + current.shape.length &&
+        current.shape[y - curAbsY][x - current.x];
 
-const checkDown = (grid: number[][], shape: number[][], x: number, y: number) => {
-  // check if the shape can move down
-  for (let i = 0; i < shape.at(-1)!.length; i++) {
-    if (grid[y + shape.length][x + i] === 1) {
-      console.log(grid[y + shape.length]);
-      console.log(x, i);
-      return false;
+      row[x] ||= atSign;
     }
   }
-  return true;
 };
 
-const moveLeft = (grid: number[][], shape: number[][], x: number, y: number) => {
-  // move the shape left
+const rockCollide = () => {
+  const curAbsY = grid.length + current.y;
 
-  // if the shape can move left
-  if (checkLeft(grid, shape, x, y)) {
-    // clear the shape
-    for (let i = 0; i < shape.length; i++) {
-      for (let j = 0; j < shape[i].length; j++) {
-        grid[y + i][x + j] = 0;
+  for (let y = curAbsY + current.shape.length - 1; y >= curAbsY; y--) {
+    for (let x = 0; x < WIDTH; x++) {
+      if (grid[y]?.[x] && current.shape[y - curAbsY][x - current.x]) return true;
+    }
+  }
+  return false;
+};
+
+const floorCollide = () => grid.length + current.y <= 0;
+
+const wallCollide = () => {
+  if (current.x < 0) return true;
+  for (const row of current.shape) {
+    for (let x = 0; x < row.length; x++) {
+      if (current.x + x >= WIDTH) return true;
+    }
+  }
+  return false;
+};
+
+let windIndex = 0;
+const wind = () => {
+  const ogx = current.x;
+  if (windIndex >= input.length) windIndex = 0;
+  if (input[windIndex] === '>') current.x++;
+  if (input[windIndex] === '<') current.x--;
+  windIndex++;
+  if (wallCollide() || rockCollide() || floorCollide()) current.x = ogx;
+};
+
+const fall = () => {
+  current.y--;
+
+  if (floorCollide() || rockCollide()) {
+    current.y++;
+    place();
+    current = next();
+    return true;
+  }
+  return false;
+};
+
+// part 1
+// let rocks = 0;
+// while (rocks < 2022) {
+//   wind();
+//   if (fall()) rocks++;
+// }
+
+// console.log(grid.length - 1);
+
+// part 2
+let rocks = 0;
+windIndex = 0;
+shapeIndex = 1;
+let height = 0;
+
+type StateName = `${string},${string}`;
+type State = {
+  gainedRocks: number;
+  gainedHeight: number;
+  nextName: StateName;
+};
+
+const cache = new Map<StateName, State>();
+
+const currentStateName = (): StateName => `${windIndex},${shapeIndex}`;
+
+let lastName = currentStateName();
+let lastH = grid.length - 1;
+let lastR = rocks;
+
+let cycle = false;
+const target = 1_000_000_000_000;
+
+while (rocks < target) {
+  wind();
+  if (fall()) {
+    rocks++;
+
+    const lastIndex = grid.findIndex((row, i) => i > 0 && row.every(c => c));
+    if (lastIndex !== -1) {
+      const { length: removed } = grid.splice(0, lastIndex);
+      height += removed;
+
+      if (cycle === true) continue;
+
+      const curState: State = {
+        gainedHeight: height - lastH,
+        gainedRocks: rocks - lastR,
+        nextName: currentStateName(),
+      };
+
+      if (!cache.has(lastName)) {
+        cache.set(lastName, curState);
+        lastName = curState.nextName;
+        lastH = height;
+        lastR = rocks;
+        continue;
+      }
+
+      const queue: StateName[] = [];
+      let cur = lastName;
+      while (cache.get(cur)) {
+        queue.push(cur);
+        const currentState = cache.get(cur)!;
+        if (!queue.includes(currentState.nextName)) {
+          cur = currentState.nextName;
+          continue;
+        }
+
+        const index = queue.indexOf(currentState.nextName);
+        let summedHeight = 0;
+        let summedRocks = 0;
+        for (const S of queue.slice(index)) {
+          const { gainedHeight, gainedRocks } = cache.get(S)!;
+          summedHeight += gainedHeight;
+          summedRocks += gainedRocks;
+        }
+        const remainingRocks = target - rocks;
+        const cycles = Math.floor(remainingRocks / summedRocks);
+
+        rocks += cycles * summedRocks;
+        height += cycles * summedHeight;
+
+        cycle = true;
+        break;
       }
     }
-    // draw the shape at the new position
-    placeShape(grid, shape, x - 1, y);
-    return {
-      left: x - 1,
-      right: x + Math.max(...shape.map((row) => row.length)) - 2,
-      top: y,
-      bottom: y + shape.length - 1,
-    };
   }
-  // otherwise, return the same bounds
-  return {
-    left: x,
-    right: x + Math.max(...shape.map((row) => row.length)) - 1,
-    top: y,
-    bottom: y + shape.length - 1,
-  };
-};
-
-const moveRight = (grid: number[][], shape: number[][], x: number, y: number) => {
-  // move the shape right
-
-  // if the shape can move right
-  if (checkRight(grid, shape, x, y)) {
-    // clear the shape
-    for (let i = 0; i < shape.length; i++) {
-      for (let j = 0; j < shape[i].length; j++) {
-        grid[y + i][x + j] = 0;
-      }
-    }
-    // draw the shape at the new position
-    placeShape(grid, shape, x + 1, y);
-    return {
-      left: x + 1,
-      right: x + shape[0].length,
-      top: y,
-      bottom: y + shape.length - 1,
-    };
-  }
-  return {
-    left: x,
-    right: x + shape[0].length - 1,
-    top: y,
-    bottom: y + shape.length - 1,
-  };
-};
-
-const moveDown = (grid: number[][], shape: number[][], x: number, y: number) => {
-  // move the shape down
-
-  // if the shape can move down
-  if (checkDown(grid, shape, x, y)) {
-    // clear the shape
-    for (let i = 0; i < shape.length; i++) {
-      for (let j = 0; j < shape[i].length; j++) {
-        grid[y + i][x + j] = 0;
-      }
-    }
-    // draw the shape at the new position
-    placeShape(grid, shape, x, y + 1);
-    return {
-      left: x,
-      right: x + shape[0].length - 1,
-      top: y + 1,
-      bottom: y + shape.length,
-    };
-  }
-  return {
-    left: x,
-    right: x + shape[0].length - 1,
-    top: y,
-    bottom: y + shape.length - 1,
-  };
-};
-
-const wind = input;
-
-type Bound = {
-  left: number;
-  right: number;
-  top: number;
-  bottom: number;
-};
-
-// set the floor of the grid to be all 1
-const grid = Array.from({ length: HEIGHT }, () => Array.from({ length: WIDTH }, () => 0));
-
-for (let i = 0; i < WIDTH; i++) {
-  grid[HEIGHT - 1][i] = 1;
 }
-
-const simulate = (grid: number[][], rounds: number) => {
-  let shapeIndex = 0;
-  let windIndex = 0;
-  let bounds: Bound | undefined;
-
-  while (rounds > 0) {
-    if (!bounds) bounds = placeShape(grid, shapes[shapeIndex], 2, HEIGHT - 5);
-    else bounds = placeShape(grid, shapes[shapeIndex], bounds.left, bounds.top - 6);
-    while (checkDown(grid, shapes[shapeIndex], bounds.left, bounds.top)) {
-      console.log(draw(grid));
-      console.log('-------');
-      switch (wind[windIndex % wind.length]) {
-        case '<':
-          bounds = moveLeft(grid, shapes[shapeIndex], bounds.left, bounds.top);
-          break;
-        case '>':
-          bounds = moveRight(grid, shapes[shapeIndex], bounds.left, bounds.top);
-          break;
-      }
-      windIndex++;
-      bounds = moveDown(grid, shapes[shapeIndex], bounds.left, bounds.top);
-    }
-    switch (wind[windIndex % wind.length]) {
-      case '<':
-        bounds = moveLeft(grid, shapes[shapeIndex], bounds.left, bounds.top);
-        break;
-      case '>':
-        bounds = moveRight(grid, shapes[shapeIndex], bounds.left, bounds.top);
-        break;
-    }
-    windIndex++;
-    rounds--;
-    shapeIndex++;
-  }
-};
-
-simulate(grid, 3);
-
-console.log(draw(grid));
+height += grid.length - 1;
+console.log(height);
