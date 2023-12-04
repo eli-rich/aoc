@@ -1,14 +1,9 @@
 import { readFile } from 'node:fs/promises';
 const input = (await readFile('input.txt', 'utf8')).toLowerCase().trim();
 
-type Match = {
-  digit: number;
-  index: number;
-};
-
 const lines = input.split('\n');
 
-const DIGITS: { [key: string]: number } = {
+const DIGITS: Record<string, number> = {
   one: 1,
   two: 2,
   three: 3,
@@ -20,55 +15,25 @@ const DIGITS: { [key: string]: number } = {
   nine: 9,
 };
 
-const regexDigits = [
-  'one',
-  'two',
-  'three',
-  'four',
-  'five',
-  'six',
-  'seven',
-  'eight',
-  'nine',
-  '1',
-  '2',
-  '3',
-  '4',
-  '5',
-  '6',
-  '7',
-  '8',
-  '9',
-];
-
-const toNum = (digit: string): number => {
-  if (!isNaN(Number(digit))) return Number(digit);
-  return DIGITS[digit];
+const toNum = (input: string): number => {
+  return input in DIGITS ? DIGITS[input] : Number(input);
 };
 
-const calibrationValues = <number[]>[];
-const regexes = <RegExp[]>[];
-
-for (const digit of regexDigits) {
-  const regex = new RegExp(digit);
-  regexes.push(regex);
-}
+const values = <number[]>[];
 
 for (const line of lines) {
-  const digits = <Match[]>[];
-  for (const regex of regexes) {
-    const matches = regex.exec(line);
-    if (matches) {
-      digits.push({ digit: toNum(matches[0]), index: matches.index });
+  const matches = <string[]>[];
+  for (let i = 0; i < line.length; i++) {
+    if (!isNaN(parseInt(line[i]))) {
+      matches.push(line[i]);
+    } else {
+      const digit = Object.keys(DIGITS).find(d => line.startsWith(d, i));
+      if (!digit) continue;
+      matches.push(DIGITS[digit].toString());
     }
   }
-  const sortedDigits = digits.toSorted((a, b) => a.index - b.index);
-  const firstDigit = sortedDigits[0].digit;
-  const lastDigit = sortedDigits[sortedDigits.length - 1].digit;
-  const calibrationValue = Number(firstDigit.toString() + lastDigit.toString());
-  calibrationValues.push(calibrationValue);
+  values.push(Number(matches[0] + matches[matches.length - 1]));
 }
 
-const sum = calibrationValues.reduce((a, b) => a + b, 0);
-console.log(calibrationValues);
+const sum = values.reduce((a, b) => a + b, 0);
 console.log(sum);
