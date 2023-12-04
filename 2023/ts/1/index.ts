@@ -20,6 +20,7 @@ const toNum = (input: string): number => {
 };
 
 const values = <number[]>[];
+// thanks to https://github.com/LebsterFace for the idea
 
 for (const line of lines) {
   const matches = <string[]>[];
