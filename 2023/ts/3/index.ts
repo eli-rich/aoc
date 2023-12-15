@@ -1,6 +1,6 @@
 import { readFile } from 'node:fs/promises';
 
-const input = (await readFile('test.txt', 'utf-8')).trim();
+const input = (await readFile('input.txt', 'utf-8')).trim();
 
 const lines = input.split('\n');
 
